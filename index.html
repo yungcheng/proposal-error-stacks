@@ -119,20 +119,20 @@
 			"key": "GetStackFramePositionString( position )"
 		}, {
 			"type": "op",
-			"aoid": "GetStackCalls",
-			"refId": "sec-getstackcalls",
+			"aoid": "GetStackFrames",
+			"refId": "sec-getstackframes",
 			"location": "",
-			"key": "GetStackCalls"
+			"key": "GetStackFrames"
 		}, {
 			"type": "clause",
-			"id": "sec-getstackcalls",
-			"aoid": "GetStackCalls",
-			"title": "GetStackCalls( error )",
-			"titleHTML": "GetStackCalls( <var>error</var> )",
+			"id": "sec-getstackframes",
+			"aoid": "GetStackFrames",
+			"title": "GetStackFrames( error )",
+			"titleHTML": "GetStackFrames( <var>error</var> )",
 			"number": "7",
 			"namespace": "<no location>",
 			"location": "",
-			"key": "GetStackCalls( error )"
+			"key": "GetStackFrames( error )"
 		}, {
 			"type": "op",
 			"aoid": "IsStackFrame",
@@ -318,7 +318,7 @@
 				<li><span class="item-toggle-none"></span><a href="#sec-getframestring" title="GetFrameString ( frame )"><span class="secnum">4</span> GetFrameString ( <var>frame</var> )</a></li>
 				<li><span class="item-toggle-none"></span><a href="#sec-getstackframespanstring" title="GetStackFrameSpanString( span )"><span class="secnum">5</span> GetStackFrameSpanString( <var>span</var> )</a></li>
 				<li><span class="item-toggle-none"></span><a href="#sec-getstackframepositionstring" title="GetStackFramePositionString( position )"><span class="secnum">6</span> GetStackFramePositionString( <var>position</var> )</a></li>
-				<li><span class="item-toggle-none"></span><a href="#sec-getstackcalls" title="GetStackCalls( error )"><span class="secnum">7</span> GetStackCalls( <var>error</var> )</a></li>
+				<li><span class="item-toggle-none"></span><a href="#sec-getstackframes" title="GetStackFrames( error )"><span class="secnum">7</span> GetStackFrames( <var>error</var> )</a></li>
 				<li><span class="item-toggle">◢</span><a href="#sec-stack-frame-specification-type" title="The Stack Frame Specification Type"><span class="secnum">8</span> The Stack Frame Specification Type</a>
 					<ol class="toc">
 						<li><span class="item-toggle-none"></span><a href="#sec-isstackframe" title="IsStackFrame ( frame )"><span class="secnum">8.1</span> IsStackFrame ( <var>frame</var> )</a></li>
@@ -344,7 +344,7 @@
 		</div>
 	</div>
 	<div id="spec-container">
-		<h1 class="version">Stage 0 Draft / November 30, 2016</h1>
+		<h1 class="version">Stage 0 Draft / December 2, 2016</h1>
 		<h1 class="title">Error Stacks</h1>
 
 		<emu-clause id="sec-system">
@@ -359,7 +359,7 @@
 					<ol>
 						<li>If <var>error</var> does not have an [[ErrorData]] internal slot, throw a
 							<emu-val>TypeError</emu-val> exception.</li>
-						<li>Return !
+						<li>Return ?
 							<emu-xref aoid="GetStack"><a href="#sec-getstack">GetStack</a></emu-xref>(<var>error</var>).
 						</li>
 					</ol>
@@ -374,7 +374,7 @@
 					<ol>
 						<li>If <var>error</var> does not have an [[ErrorData]] internal slot, throw a
 							<emu-val>TypeError</emu-val> exception.</li>
-						<li>Return !
+						<li>Return ?
 							<emu-xref aoid="GetStackString"><a href="#sec-getstackstring">GetStackString</a></emu-xref>(<var>error</var>).
 						</li>
 					</ol>
@@ -389,14 +389,22 @@
 			<emu-alg>
 				<ol>
 					<li>Assert: <var>error</var> has an [[ErrorData]] internal slot.</li>
-					<li>Let <var>calls</var> be !
-						<emu-xref aoid="GetStackCalls"><a href="#sec-getstackcalls">GetStackCalls</a></emu-xref>(<var>error</var>).</li>
+					<li>Let <var>frames</var> be !
+						<emu-xref aoid="GetStackFrames"><a href="#sec-getstackframes">GetStackFrames</a></emu-xref>(<var>error</var>).</li>
+					<li>Let <var>string</var> be ?
+						<emu-xref aoid="GetStackString"><a href="#sec-getstackstring">GetStackString</a></emu-xref>(<var>error</var>).</li>
 					<li>Let <var>obj</var> be !
 						<emu-xref aoid="ObjectCreate"><a href="https://tc39.github.io/ecma262/#sec-objectcreate">ObjectCreate</a></emu-xref>(
 						<emu-xref href="#sec-properties-of-the-object-prototype-object"><a href="https://tc39.github.io/ecma262/#sec-properties-of-the-object-prototype-object">%ObjectPrototype%</a></emu-xref>).</li>
 					<li>Perform !
 						<emu-xref aoid="CreateDataProperty"><a href="https://tc39.github.io/ecma262/#sec-createdataproperty">CreateDataProperty</a></emu-xref>(<var>obj</var>,
-						<emu-val>"calls"</emu-val>, <var>calls</var>).</li>
+						<emu-val>"frames"</emu-val>, <var>frames</var>).</li>
+					<li>Assert: The above
+						<emu-xref aoid="CreateDataProperty"><a href="https://tc39.github.io/ecma262/#sec-createdataproperty">CreateDataProperty</a></emu-xref> operation returns
+						<emu-val>true</emu-val>.</li>
+					<li>Perform !
+						<emu-xref aoid="CreateDataProperty"><a href="https://tc39.github.io/ecma262/#sec-createdataproperty">CreateDataProperty</a></emu-xref>(<var>obj</var>,
+						<emu-val>"string"</emu-val>, <var>string</var>).</li>
 					<li>Assert: The above
 						<emu-xref aoid="CreateDataProperty"><a href="https://tc39.github.io/ecma262/#sec-createdataproperty">CreateDataProperty</a></emu-xref> operation returns
 						<emu-val>true</emu-val>.</li>
@@ -418,20 +426,23 @@
 			<emu-alg>
 				<ol>
 					<li>Assert: <var>error</var> has an [[ErrorData]] internal slot.</li>
-					<li>Let <var>calls</var> be !
-						<emu-xref aoid="GetStackCalls"><a href="#sec-getstackcalls">GetStackCalls</a></emu-xref>(<var>error</var>).</li>
-					<li>Let <var>stackString</var> be a String consisting solely of the code unit 0x0020 (SPACE).</li>
-					<li>For each Stack Frame <var>frame</var> in <var>calls</var>,
+					<li>Let <var>errorString</var> be ?
+						<emu-xref aoid="ToString"><a href="https://tc39.github.io/ecma262/#sec-tostring">ToString</a></emu-xref>(<var>error</var>).</li>
+					<li>Let <var>frames</var> be !
+						<emu-xref aoid="GetStackFrames"><a href="#sec-getstackframes">GetStackFrames</a></emu-xref>(<var>error</var>).</li>
+					<li>Let <var>frameString</var> be a String consisting solely of the code unit 0x0020 (SPACE).</li>
+					<li>For each Stack Frame <var>frame</var> in <var>frames</var>,
 						<ol>
-							<li>If <var>stackString</var> does not consist solely of the code unit 0x0020 (SPACE),
+							<li>If <var>frameString</var> does not consist solely of the code unit 0x0020 (SPACE),
 								<ol>
-									<li>Let <var>stackString</var> be the concatenation of <var>stackString</var>, the code unit 0x000A (LINE FEED), and the code unit 0x0020 (SPACE).</li>
+									<li>Let <var>frameString</var> be the concatenation of <var>frameString</var>, the code unit 0x000A (LINE FEED), and the code unit 0x0020 (SPACE).</li>
 								</ol>
 							</li>
-							<li>Let <var>stackString</var> be the concatenation of <var>stackString</var> and !
+							<li>Let <var>frameString</var> be the concatenation of <var>frameString</var> and !
 								<emu-xref aoid="GetFrameString"><a href="#sec-getframestring">GetFrameString</a></emu-xref>(<var>frame</var>).</li>
 						</ol>
 					</li>
+					<li>Let <var>stackString</var> be the concatenation of <var>errorString</var>, the code unit 0x000A (LINE FEED), and <var>frameString</var>.</li>
 					<li>Return <var>stackString</var>.
 					</li>
 				</ol>
@@ -478,15 +489,15 @@
 			<p>When the abstract operation <var>GetStackFrameSpanString</var> is called with argument <var>span</var>, the following steps are performed:</p>
 			<emu-alg>
 				<ol>
-					<li>Assert:
+					<li>Assert: !
 						<emu-xref aoid="IsStackFrameSpan"><a href="#sec-isstackspan">IsStackFrameSpan</a></emu-xref>(<var>span</var>) is
 						<emu-val>true</emu-val>.</li>
-					<li>Let <var>spanString</var> be
+					<li>Let <var>spanString</var> be !
 						<emu-xref aoid="GetStackFramePositionString"><a href="#sec-getstackframepositionstring">GetStackFramePositionString</a></emu-xref>(<var>span</var>.[[StartPosition]]).</li>
 					<li>If <var>span</var> has an [[EndPosition]] internal slot,
 						<ol>
 							<li>Let <var>spanString</var> be the concatenation of <var>spanString</var>,
-								<emu-val>"::"</emu-val>, and
+								<emu-val>"::"</emu-val>, and !
 								<emu-xref aoid="GetStackFramePositionString"><a href="#sec-getstackframepositionstring">GetStackFramePositionString</a></emu-xref>(<var>span</var>.[[EndPosition]]).</li>
 						</ol>
 					</li>
@@ -502,7 +513,7 @@
 			<p>When the abstract operation <var>GetStackFramePositionString</var> is called with argument <var>position</var>, the following steps are performed:</p>
 			<emu-alg>
 				<ol>
-					<li>Assert:
+					<li>Assert: !
 						<emu-xref aoid="IsStackFramePosition"><a href="#sec-isstackposition">IsStackFramePosition</a></emu-xref>(<var>position</var>) is
 						<emu-val>true</emu-val>.</li>
 					<li>Let <var>positionString</var> be !
@@ -520,23 +531,23 @@
 			</emu-alg>
 		</emu-clause>
 
-		<emu-clause id="sec-getstackcalls" aoid="GetStackCalls">
-			<h1><span class="secnum">7</span>GetStackCalls( <var>error</var> )<span class="utils"><span class="anchor"><a href="#sec-getstackcalls">link</a></span><span class="anchor"><a href="#" class="utils-pin">pin</a></span></span>
+		<emu-clause id="sec-getstackframes" aoid="GetStackFrames">
+			<h1><span class="secnum">7</span>GetStackFrames( <var>error</var> )<span class="utils"><span class="anchor"><a href="#sec-getstackframes">link</a></span><span class="anchor"><a href="#" class="utils-pin">pin</a></span></span>
 			</h1>
-			<p>When the abstract operation <var>GetStackCalls</var> is called with argument <var>error</var>, the following steps are performed:</p>
+			<p>When the abstract operation _GetStackFrames is called with argument <var>error</var>, the following steps are performed:</p>
 			<emu-alg>
 				<ol>
 					<li>Assert: <var>error</var> has an [[ErrorData]] internal slot.</li>
-					<li>Let <var>calls</var> be a new empty
+					<li>Let <var>frames</var> be a new empty
 						<emu-xref href="#sec-list-and-record-specification-type"><a href="https://tc39.github.io/ecma262/#sec-list-and-record-specification-type">List</a></emu-xref>.</li>
 					<li>Repeat, for each Stack Frame <var>frame</var> in <var>error</var>.[[ErrorData]],
 						<ol>
 							<li>Append !
-								<emu-xref aoid="FromStackFrame"><a href="#sec-fromstackframe">FromStackFrame</a></emu-xref>(<var>frame</var>) to <var>calls</var>.</li>
+								<emu-xref aoid="FromStackFrame"><a href="#sec-fromstackframe">FromStackFrame</a></emu-xref>(<var>frame</var>) to <var>frames</var>.</li>
 						</ol>
 					</li>
 					<li>Let <var>array</var> be !
-						<emu-xref aoid="CreateArrayFromList"><a href="https://tc39.github.io/ecma262/#sec-createarrayfromlist">CreateArrayFromList</a></emu-xref>(<var>calls</var>).</li>
+						<emu-xref aoid="CreateArrayFromList"><a href="https://tc39.github.io/ecma262/#sec-createarrayfromlist">CreateArrayFromList</a></emu-xref>(<var>frames</var>).</li>
 					<li>Let <var>status</var> be !
 						<emu-xref aoid="SetIntegrityLevel"><a href="https://tc39.github.io/ecma262/#sec-setintegritylevel">SetIntegrityLevel</a></emu-xref>(<var>array</var>,
 						<emu-val>"frozen"</emu-val>).</li>
@@ -558,7 +569,7 @@
 				<p>When the abstract operation IsStackFrame is called with Stack Frame <var>frame</var>, the following steps are performed:</p>
 				<emu-alg>
 					<ol>
-						<li>If
+						<li>If !
 							<emu-xref aoid="Type"><a href="https://tc39.github.io/ecma262/#sec-ecmascript-data-types-and-values">Type</a></emu-xref>(<var>frame</var>) is not Object, return
 							<emu-val>false</emu-val>.</li>
 						<li>If <var>frame</var> does not have a [[Name]] internal slot, return
@@ -567,15 +578,15 @@
 							<emu-val>false</emu-val>.</li>
 						<li>If <var>frame</var> does not have a [[Span]] internal slot, return
 							<emu-val>false</emu-val>.</li>
-						<li>If
+						<li>If !
 							<emu-xref aoid="Type"><a href="https://tc39.github.io/ecma262/#sec-ecmascript-data-types-and-values">Type</a></emu-xref>(<var>frame</var>.[[Name]]) is not String, return
 							<emu-val>false</emu-val>.</li>
-						<li>If
-							<emu-xref aoid="Type"><a href="https://tc39.github.io/ecma262/#sec-ecmascript-data-types-and-values">Type</a></emu-xref>(<var>frame</var>.[[Source]]) is not String, and
+						<li>If !
+							<emu-xref aoid="Type"><a href="https://tc39.github.io/ecma262/#sec-ecmascript-data-types-and-values">Type</a></emu-xref>(<var>frame</var>.[[Source]]) is not String, and !
 							<emu-xref aoid="IsStackFrame"><a href="#sec-isstackframe">IsStackFrame</a></emu-xref>(<var>source</var>) is not
 							<emu-val>true</emu-val>, return
 							<emu-val>false</emu-val>.</li>
-						<li>If
+						<li>If !
 							<emu-xref aoid="IsStackFrameSpan"><a href="#sec-isstackspan">IsStackFrameSpan</a></emu-xref>(<var>frame</var>.[[Span]]) is not
 							<emu-val>true</emu-val>, return
 							<emu-val>false</emu-val>.</li>
@@ -592,18 +603,18 @@
 				<p>When the abstract operation IsStackFrameSpan is called with argument <var>span</var>, the following steps are performed:</p>
 				<emu-alg>
 					<ol>
-						<li>If
+						<li>If !
 							<emu-xref aoid="Type"><a href="https://tc39.github.io/ecma262/#sec-ecmascript-data-types-and-values">Type</a></emu-xref>(<var>span</var>) is not Object, return
 							<emu-val>false</emu-val>.</li>
 						<li>If <var>span</var> does not have a [[StartPosition]] internal slot, return
 							<emu-val>false</emu-val>.</li>
-						<li>If
+						<li>If !
 							<emu-xref aoid="IsStackFramePosition"><a href="#sec-isstackposition">IsStackFramePosition</a></emu-xref>(<var>span</var>.[[StartPosition]]) is not
 							<emu-val>true</emu-val>, return
 							<emu-val>false</emu-val>.</li>
 						<li>If <var>span</var> has an [[EndPosition]] internal slot,
 							<ol>
-								<li>If
+								<li>If !
 									<emu-xref aoid="IsStackFramePosition"><a href="#sec-isstackposition">IsStackFramePosition</a></emu-xref>(<var>span</var>.[[EndPosition]]) is not
 									<emu-val>true</emu-val>, return
 									<emu-val>false</emu-val>.</li>
@@ -622,7 +633,7 @@
 				<p>When the abstract operation IsStackFramePosition is called with argument <var>position</var>, the following steps are performed:</p>
 				<emu-alg>
 					<ol>
-						<li>If
+						<li>If !
 							<emu-xref aoid="Type"><a href="https://tc39.github.io/ecma262/#sec-ecmascript-data-types-and-values">Type</a></emu-xref>(<var>position</var>) is not Object, return
 							<emu-val>false</emu-val>.</li>
 						<li>If <var>position</var> does not have a [[Line]] internal slot, return
@@ -648,10 +659,10 @@
 				<p>When the abstract operation FromStackFrame is called with Stack Frame <var>frame</var>, the following steps are taken:</p>
 				<emu-alg>
 					<ol>
-						<li>Assert:
+						<li>Assert: !
 							<emu-xref aoid="IsStackFrame"><a href="#sec-isstackframe">IsStackFrame</a></emu-xref>(<var>frame</var>) is
 							<emu-val>true</emu-val>.</li>
-						<li>Let <var>obj</var> be
+						<li>Let <var>obj</var> be !
 							<emu-xref aoid="ObjectCreate"><a href="https://tc39.github.io/ecma262/#sec-objectcreate">ObjectCreate</a></emu-xref>(
 							<emu-xref href="#sec-properties-of-the-object-prototype-object"><a href="https://tc39.github.io/ecma262/#sec-properties-of-the-object-prototype-object">%ObjectPrototype%</a></emu-xref>).</li>
 						<li>Assert: <var>obj</var> is an extensible ordinary object with no own properties.</li>
@@ -659,7 +670,7 @@
 							<emu-xref aoid="CreateDataProperty"><a href="https://tc39.github.io/ecma262/#sec-createdataproperty">CreateDataProperty</a></emu-xref>(<var>obj</var>,
 							<emu-val>"name"</emu-val>, <var>frame</var>.[[Name]]).</li>
 						<li>Let <var>source</var> be <var>frame</var>.[[Source]].</li>
-						<li>If
+						<li>If !
 							<emu-xref aoid="Type"><a href="https://tc39.github.io/ecma262/#sec-ecmascript-data-types-and-values">Type</a></emu-xref>(<var>source</var>) is String,
 							<ol>
 								<li>Perform !
@@ -669,7 +680,7 @@
 						</li>
 						<li>Else,
 							<ol>
-								<li>Assert:
+								<li>Assert: !
 									<emu-xref aoid="IsStackFrame"><a href="#sec-isstackframe">IsStackFrame</a></emu-xref>(<var>source</var>) is
 									<emu-val>true</emu-val>.</li>
 								<li>Perform !
@@ -702,7 +713,7 @@
 				<p>When the abstract operation FromStackFrameSpan is called with argument <var>span</var>, the following steps are taken:</p>
 				<emu-alg>
 					<ol>
-						<li>Assert:
+						<li>Assert: !
 							<emu-xref aoid="IsStackFrameSpan"><a href="#sec-isstackspan">IsStackFrameSpan</a></emu-xref>(<var>span</var>) is
 							<emu-val>true</emu-val>.</li>
 						<li>Let <var>list</var> be a new empty
@@ -730,7 +741,7 @@
 				<p>When the abstract operation FromStackFramePosition is called with argument <var>position</var>, the following steps are taken:</p>
 				<emu-alg>
 					<ol>
-						<li>Assert:
+						<li>Assert: !
 							<emu-xref aoid="IsStackFramePosition"><a href="#sec-isstackposition">IsStackFramePosition</a></emu-xref>(<var>position</var>) is
 							<emu-val>true</emu-val>.</li>
 						<li>Let <var>list</var> be a new empty
@@ -775,12 +786,12 @@
 						<ol>
 							<li>Let <var>E</var> be the
 								<emu-val>this</emu-val> value.</li>
-							<li>If
+							<li>If !
 								<emu-xref aoid="Type"><a href="https://tc39.github.io/ecma262/#sec-ecmascript-data-types-and-values">Type</a></emu-xref>(<var>E</var>) is not Object, throw a
 								<emu-val>TypeError</emu-val> exception.</li>
 							<li>If <var>E</var> does not have an [[ErrorData]] internal slot, throw a
 								<emu-val>TypeError</emu-val> exception.</li>
-							<li>Return !
+							<li>Return ?
 								<emu-xref aoid="GetStackString"><a href="#sec-getstackstring">GetStackString</a></emu-xref>(<var>error</var>).
 							</li>
 						</ol>
